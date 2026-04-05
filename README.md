@@ -90,18 +90,4 @@ Return χ_K
 * `D` is applied in k-space (element-wise multiplication)
 * Suitable for model-based reconstruction with iterative refinement
 
----
 
-## Applications
-
-* Quantitative Susceptibility Mapping (QSM)
-* MRI phase-to-susceptibility inversion
-* Physics-guided deep learning extensions
-
----
-
-If you want, I can next:
-
-* add a **diagram/flowchart for README**
-* include a **PyTorch implementation section**
-* or format it exactly like your **paper + GitHub repo combo**
