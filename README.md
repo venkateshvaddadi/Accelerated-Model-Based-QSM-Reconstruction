@@ -1,33 +1,107 @@
-# Initialization
-chi_k = 0
-chi_k_minus_1 = 0
-theta_k = 1
+Here is a **clean, professional README-style version** suitable for GitHub:
 
-for k in range(K):
+---
 
-    # ---- Momentum update ----
-    theta_k_plus_1 = (1 + sqrt(1 + 4 * theta_k**2)) / 2
-    m_k = (theta_k - 1) / theta_k_plus_1
+# MA-MBIR-QSM
 
-    # ---- Extrapolation step ----
-    chi_hat = chi_k + m_k * (chi_k - chi_k_minus_1)
+**Momentum-Accelerated Model-Based QSM Reconstruction**
 
-    # ---- Forward model ----
-    phi_chi_hat = F_H( D * F(chi_hat) )
+---
 
-    # ---- Residual ----
-    r_k = phi_chi_hat - y
+## Overview
 
-    # ---- Gradient computation ----
-    g_k = F_H( D * F(r_k) )
+MA-MBIR-QSM is an iterative reconstruction algorithm for Quantitative Susceptibility Mapping (QSM).
+It combines a physics-based forward model with momentum acceleration (FISTA-style) to improve convergence speed and reconstruction quality.
 
-    # ---- Update step ----
-    chi_next = chi_hat - (1 / L) * g_k
+---
 
-    # ---- Prepare for next iteration ----
-    chi_k_minus_1 = chi_k
-    chi_k = chi_next
-    theta_k = theta_k_plus_1
+## Inputs
 
-# Output
-return chi_k
+* **`y`** : Local field
+* **`D`** : Dipole kernel
+* **`F`** : Fourier transform operator
+* **`K`** : Number of iterations
+* **`L`** : Step size
+
+---
+
+## Output
+
+* **`χ`** : Reconstructed susceptibility map
+
+---
+
+## Algorithm
+
+```
+Initialize:
+    χ₀ = 0
+    χ₋₁ = 0
+    θ₀ = 1
+
+For k = 0 to K-1:
+
+    Momentum update:
+        θₖ₊₁ = (1 + sqrt(1 + 4θₖ²)) / 2
+        mₖ = (θₖ - 1) / θₖ₊₁
+
+    Extrapolation:
+        χ̂ₖ = χₖ + mₖ (χₖ - χₖ₋₁)
+
+    Forward model:
+        φ(χ̂ₖ) = Fᴴ ( D · F(χ̂ₖ) )
+
+    Residual:
+        rₖ = φ(χ̂ₖ) - y
+
+    Gradient:
+        gₖ = Fᴴ ( D · F(rₖ) )
+
+    Update:
+        χₖ₊₁ = χ̂ₖ - (1 / L) gₖ
+
+    Update variables:
+        χₖ₋₁ = χₖ
+        χₖ = χₖ₊₁
+        θₖ = θₖ₊₁
+
+Return χ_K
+```
+
+---
+
+## Key Components
+
+* **Forward Model**:
+  φ(χ) = Fᴴ D F(χ)
+
+* **Momentum Acceleration**:
+  Uses FISTA-style update to accelerate convergence.
+
+* **Gradient Update**:
+  Computed using the adjoint forward model.
+
+---
+
+## Notes
+
+* `F` denotes Fourier transform
+* `Fᴴ` denotes inverse (Hermitian) Fourier transform
+* `D` is applied in k-space (element-wise multiplication)
+* Suitable for model-based reconstruction with iterative refinement
+
+---
+
+## Applications
+
+* Quantitative Susceptibility Mapping (QSM)
+* MRI phase-to-susceptibility inversion
+* Physics-guided deep learning extensions
+
+---
+
+If you want, I can next:
+
+* add a **diagram/flowchart for README**
+* include a **PyTorch implementation section**
+* or format it exactly like your **paper + GitHub repo combo**
