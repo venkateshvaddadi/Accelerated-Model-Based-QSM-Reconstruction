@@ -206,7 +206,7 @@ This repository is released for academic research purposes.
 
 ---
 
-## Contact
+## venkateshvaddadi254@gmail.com
 
 **Vaddadi Venkatesh**
 
