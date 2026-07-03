@@ -1,5 +1,5 @@
 
-# Physics-Informed Accelerated QSM Reconstruction Engine
+# Accelerated QSM Reconstruction Engine
 
 This repository hosts production-ready, modularized PyTorch implementations for advanced Model-Based Iterative Reconstruction (MBIR) algorithms dedicated to **Quantitative Susceptibility Mapping (QSM)**. 
 
