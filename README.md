@@ -185,18 +185,6 @@ The following metrics are computed automatically.
 
 ---
 
-## Citation
-
-If you use this repository in your research, please cite
-
-```bibtex
-@article{Vaddadi2026AcceleratedQSM,
-  title={Accelerated Model-Based Quantitative Susceptibility Mapping Using Momentum and Vector Extrapolation},
-  author={Vaddadi, Venkatesh and Sirela, Venkata Ganesh and Yalavarthy, Phaneendra K.},
-  journal={Under Review},
-  year={2026}
-}
-```
 
 ---
 
