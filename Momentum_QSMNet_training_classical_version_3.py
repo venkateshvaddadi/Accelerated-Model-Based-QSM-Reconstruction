@@ -1,57 +1,43 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Apr  9 14:40:53 2026
+Momentum-Accelerated Model-Based QSM (MA-Mo-QSM)
 
-@author: venkatesh
+Official implementation accompanying the manuscript:
+"Accelerated Model-Based Quantitative Susceptibility Mapping
+Using Momentum and Vector Extrapolation"
+
+Author:
+Venkatesh Vaddadi
+Indian Institute of Science (IISc)
 """
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Apr  2 13:03:17 2026
-
-@author: venkatesh
-"""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Apr  2 11:01:39 2026
-
-@author: venkatesh
-"""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Apr  1 17:30:12 2026
-
-@author: venkatesh
-"""
 # --- Standard Library & OS ---
+# ==========================================================
+# Standard Library
+# ==========================================================
 import os
 import time
 from datetime import datetime
-from pathlib import Path
-from math import sqrt
 
-# --- Scientific Computing ---
+# ==========================================================
+# Scientific Computing
+# ==========================================================
 import numpy as np
 import pandas as pd
 import scipy.io
-from tqdm import tqdm
 
-# --- PyTorch Core ---
+# ==========================================================
+# PyTorch
+# ==========================================================
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
 import torch.fft
 
-# --- PyTorch Data & Vision ---
-from torch.utils.data import Dataset, DataLoader
-import torchvision.transforms as transforms
+# ==========================================================
+# Visualization
+# ==========================================================
+import matplotlib.pyplot as plt
 
 def dipole_kernel(matrix_size, voxel_size, B0_dir=[0, 0, 1]):
     # Fix: Replace np.int with built-in int for NumPy 2.0+ compatibility
@@ -83,8 +69,8 @@ def dipole_kernel(matrix_size, voxel_size, B0_dir=[0, 0, 1]):
     D = torch.tensor(D).unsqueeze(dim=0)
     
     return D
-#%%
 
+# ==========================================================
 
 device_id = 0
 
@@ -93,9 +79,7 @@ matrix_size = [176, 176, 160]
 voxel_size = [1, 1, 1]
 dk = dipole_kernel(matrix_size, voxel_size, B0_dir=[0, 0, 1]).cuda(device_id)
 
-#%%
-import torch
-import torch.nn as nn
+# ==========================================================
 
 class MomentumNetQSM(nn.Module):
     def __init__(self, num_iters=10, rho=0.5):
@@ -143,10 +127,8 @@ class MomentumNetQSM(nn.Module):
     def dipole_conv(self, x, kernel):
         # QSM physics performed in Fourier Domain
         return torch.real(torch.fft.ifftn(torch.fft.fftn(x) * kernel))
-#%%
 
-
-
+# ==========================================================
 
 import os
 from datetime import datetime
@@ -174,8 +156,8 @@ exp_dir = os.path.join(base_dir, exp_name)
 # Create folders
 os.makedirs(exp_dir, exist_ok=True)
 
+# ==========================================================
 
-#%%
 # ==========================================
 # Display Experiment Metadata
 # ==========================================
@@ -189,19 +171,17 @@ print(f"🧬 Relaxation (ρ):  {rho}")
 print(f"💻 Device:          CUDA:{device_id}")
 print("="*50 + "\n")
 
+# ==========================================================
 
-
-#%%
-# wide_resnet_model = WideResNet().cuda(device_id)
 model = MomentumNetQSM(num_iters=num_iters, rho=rho).to(device_id)
 
-
-
-#%%
+# ==========================================================
 
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 criterion = nn.MSELoss()
-#%%
+
+# ==========================================================
+
 def gradient_loss(gen_chi):
     # Penalizes sharp, unphysical jumps in the susceptibility map
     dx = gen_chi[:, :, 1:, :, :] - gen_chi[:, :, :-1, :, :]
@@ -210,7 +190,9 @@ def gradient_loss(gen_chi):
     return torch.mean(torch.abs(dx)) + torch.mean(torch.abs(dy)) + torch.mean(torch.abs(dz))
 
 # Total Loss
-#%%
+
+# ==========================================================
+
 def tic():
     # Homemade version of matlab tic and toc functions
     import time
@@ -224,18 +206,16 @@ def toc():
         print(str(time.time() - startTime_for_tictoc) )
     else:
         print("Toc: start time not set")
-#%%
+
+# ==========================================================
+
 batch_size=1
 results = []
 
 patients_list = [1,2,3,4,5,6,7,8,9,10,11,12] 
 orientations=[1,2,3,4,5]
 
-# patients_list = [3 ] 
-# orientations=[ 5,4]
-
 raw_data_path = '../../QSM_data/data_for_experiments/given_data/raw_data_names_modified/'
-
 
 for i in patients_list:
     # print(f"Patient: {i}\n")
@@ -246,19 +226,11 @@ for i in patients_list:
         # Load Raw Data
         phs = scipy.io.loadmat(f"{raw_data_path}/patient_{i}/phs{j}.mat")['phs']
         msk = scipy.io.loadmat(f"{raw_data_path}/patient_{i}/msk{j}.mat")['msk']
-        # mag = scipy.io.loadmat(f"{raw_data_path}/patient_{i}/mag{j}.mat")['mag']
 
         sus=scipy.io.loadmat(raw_data_path+'/patient_'+str(i)+'/cos'+str(j)+'.mat')['cos']
 
         phs = torch.tensor(phs).float().unsqueeze(0).unsqueeze(0).cuda(device_id)
         msk = torch.tensor(msk).float().unsqueeze(0).unsqueeze(0).cuda(device_id)
-        # mag = torch.tensor(mag).float().unsqueeze(0).unsqueeze(0).cuda(device_id)
-
-
-
-
-
-
 
         temp_shape=phs.shape
         matrix_size = [temp_shape[2],temp_shape[3], temp_shape[4]]
@@ -278,10 +250,7 @@ for i in patients_list:
             # ----------------------------------
             # Loss
             # ----------------------------------
-            # loss = criterion(phi_pred.real, phs)
-            # loss = criterion(phi_pred.real, phs) + 1e-3 * gradient_loss(chi_pred)
             loss = torch.mean((phi_pred.real - phs)**2)
-
 
             # ----------------------------------
             # Backprop
@@ -294,8 +263,6 @@ for i in patients_list:
 
         
             x_k_cpu = (chi_pred.real.detach().cpu().numpy()) * (msk.detach().cpu().numpy())
-
-
 
             from modules.metrics import *
             # =========================
@@ -312,7 +279,6 @@ for i in patients_list:
             sus_copy = np.expand_dims(sus_copy, axis=0)  # Shape becomes (1, 3)
 
             # print(sus.shape)
-
 
             ssim_val=compute_ssim_numpy(x_k_cpu, sus_copy)
             
@@ -352,22 +318,21 @@ for i in patients_list:
                 "chi_recon": x_k_cpu
             })
 
-
-
-
-
 df = pd.DataFrame(results)
 save_path = "momentum_qsm_results.csv"
 df.to_csv(save_path, index=False)
 
 print(f"Results saved to {save_path}")
-#%%
+
+# ==========================================================
+
 avg_results = df.mean(numeric_only=True)
 
 print("\n=== Average Results ===")
 print(avg_results)
 
-#%%
+# ==========================================================
+
 df = pd.DataFrame(results)
 
 mean_vals = df.mean(numeric_only=True)
@@ -385,7 +350,8 @@ summary = pd.DataFrame({
 
 print(summary)
 
-#%%
+# ==========================================================
+
 import matplotlib.pyplot as plt
 
 def plot_qsm_comparison(reconstruction, ground_truth, mask, title="QSM Reconstruction"):
@@ -430,19 +396,3 @@ def plot_qsm_comparison(reconstruction, ground_truth, mask, title="QSM Reconstru
 # Plot the result
 plot_qsm_comparison(x_k_cpu, sus, msk.detach().cpu().numpy(), 
                     title=f"Patient {i} Orientation {j}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
