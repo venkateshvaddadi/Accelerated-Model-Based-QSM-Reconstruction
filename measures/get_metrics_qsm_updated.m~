@@ -1,0 +1,108 @@
+%% This file will generate metrics for QSMnet on all test cases.
+
+%%clc; 
+%%
+clear all; 
+close all; 
+addpath('./'); 
+format short;
+%%
+num_cases = 6;  
+orients=5;
+
+ssim_scores = zeros(6,5);
+rmse_scores = zeros(6,5);
+psnr_scores = zeros(6,5);
+hfen_scores = zeros(6,5);
+
+savefigure = 1;
+%%
+
+
+
+
+experiements_folder="../savedModels/MODL_QSM_MODELS_dw_UNet_loss_l1/";
+experiment_name="Jul_26_12_03_pm_model_K_1_B_2_N_2000/"
+epoch=1
+
+
+full_path_for_results=strcat(experiements_folder,experiment_name,'predictions_',num2str(epoch),'/modl-net');
+disp(full_path_for_results)
+
+%%
+% for ground truth accessing......
+test_data_path='../../../QSM_data/data_for_experiments/data_source_1_naveen_given/Testing_Data/';
+%%
+for i=1:6
+    for j=1:5
+        idx = strcat('-',num2str(i),num2str(j),'.mat');
+        %%disp(strcat(full_path_for_results,idx))
+        
+        disp(strcat(test_data_path,'cos/cos',idx))
+        % loading cosmos,msk from gro/und truth........
+        load(strcat(test_data_path,'/cos/cos',idx));
+        load(strcat(test_data_path,'/msk/msk' ,idx));
+
+        % loading generated results......
+        %load(strcat(full_path_for_results,idx));
+        disp(strcat(full_path_for_results,'-',num2str(i),num2str(j),'.mat'))
+        load(strcat(full_path_for_results,'-',num2str(i),num2str(j),'.mat'));
+ 
+        modl = squeeze(modl);
+        modl=modl .* single(msk);
+        
+        alpha = 0.9;
+        
+        %%modl = (modl + (modl - imgaussfilt3(modl, 0.5, 'FilterSize', 5)) * alpha) .* single(msk); 
+        
+         if savefigure
+            disp_fig(modl, cos,i,j,experiements_folder,experiment_name,epoch);
+         end
+        
+        ssim_scores(i,j) = round(compute_ssim(modl,cos), 4);      
+        rmse_scores(i,j) = round(compute_rmse(modl,cos), 4);      
+        psnr_scores(i,j) = round(compute_psnr(modl,cos), 4);      
+        hfen_scores(i,j) = round(compute_hfen(modl,cos), 4);     
+        fprintf('%d %d %.4f %.4f %.4f %.4f \n',i,j,ssim_scores(i,j),psnr_scores(i,j),rmse_scores(i,j),hfen_scores(i,j) )
+
+    
+    end
+     clear cos susc
+end
+
+results = [     ssim_scores          mean(ssim_scores,2)            rmse_scores        mean(rmse_scores,2)  ;
+            mean(ssim_scores,1)      mean(ssim_scores(:))        mean(rmse_scores,1)   mean(rmse_scores(:)) ;
+               psnr_scores           mean(psnr_scores,2)            hfen_scores        mean(hfen_scores,2)  ;
+            mean(psnr_scores,1)      mean(psnr_scores(:))        mean(hfen_scores,1)   mean(hfen_scores(:))];
+
+
+%% writing the results as a csv file.
+
+output_file_name=strcat(num2str(epoch),'_',num2str(mean(ssim_scores(:))),'_',num2str(mean(psnr_scores(:))),'_',num2str(mean(rmse_scores(:))),'_',num2str(mean(hfen_scores(:))),'.csv');
+output_file_path=strcat(experiements_folder,experiment_name,'output_csv/',output_file_name);
+%%disp(output_file_path)
+ls(output_file_name)
+
+output=([
+    ssim_scores,mean(ssim_scores,2);mean(ssim_scores,1),mean(ssim_scores(:));
+    0,0,0,0,0,0;
+    0,0,0,0,0,0;
+    psnr_scores,mean(psnr_scores,2);mean(psnr_scores,1),mean(psnr_scores(:));
+    0,0,0,0,0,0;
+    0,0,0,0,0,0;
+    rmse_scores,mean(rmse_scores,2);mean(rmse_scores,1),mean(rmse_scores(:));
+    0,0,0,0,0,0;
+    0,0,0,0,0,0;
+    hfen_scores,mean(hfen_scores,2);mean(hfen_scores,1),mean(hfen_scores(:));
+    0,0,0,0,0,0;
+    0,0,0,0,0,0;
+    0,0,mean(ssim_scores(:)),mean(psnr_scores(:)),mean(rmse_scores(:)),mean(hfen_scores(:))
+    ]);
+
+writematrix(round(output,4), output_file_path) 
+%%
+% display final results
+
+disp('Final results:')
+%disp([mean(ssim_scores(:)),mean(psnr_scores(:)),mean(rmse_scores(:)),mean(hfen_scores(:))])
+fprintf('%.4f %.4f %.4f %.4f\n',mean(ssim_scores(:)),mean(psnr_scores(:)),mean(rmse_scores(:)),mean(hfen_scores(:)))
