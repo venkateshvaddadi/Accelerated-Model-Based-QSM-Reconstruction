@@ -1,23 +1,219 @@
+# Accelerated Model-Based Quantitative Susceptibility Mapping Using Momentum and Vector Extrapolation
 
-# Accelerated QSM Reconstruction Engine
+Official PyTorch implementation of the paper:
 
-This repository hosts production-ready, modularized PyTorch implementations for advanced Model-Based Iterative Reconstruction (MBIR) algorithms dedicated to **Quantitative Susceptibility Mapping (QSM)**. 
-
-The framework features two distinct mathematical acceleration structures to resolve the ill-posed dipole inversion problem:
-1. **Reduced Rank Extrapolation (RRE)** physics-informed variants (adapted from Awasthi et al., JBO 2018).
-2. **Nesterov Momentum-Accelerated** proximal gradient descent architectures.
-
-Both methods seamlessly pair classical forward QSM physics operators with optional neural network image refiners (such as 3D U-Nets or WideResNets) to balance rigid data-fidelity bounds with strong generative image priors.
+> **Accelerated Model-Based Quantitative Susceptibility Mapping Using Momentum and Vector Extrapolation**
 
 ---
 
-## 📂 Repository Structure
+## Overview
 
-```text
+This repository provides two accelerated optimization algorithms for **Model-Based Quantitative Susceptibility Mapping (QSM)** reconstruction.
+
+Unlike conventional approaches that improve QSM reconstruction through sophisticated regularization models or deep learning priors, the proposed methods focus on **accelerating the optimization process itself** while preserving the underlying physics-based dipole inversion formulation.
+
+The repository includes implementations of:
+
+- **Momentum-Accelerated Model-Based QSM (MA-Mo-QSM)**
+- **Reduced Rank Extrapolation-Based QSM (RRE-QSM)**
+
+Both methods solve the QSM inverse problem by enforcing data consistency through the dipole forward model while accelerating convergence using established optimization techniques.
+
+---
+
+## Repository Structure
+
+```
+Accelerated-QSM/
+│
+├── MA_MO_QSM_main.py          # Main script for Momentum-Accelerated QSM
+├── RRE_QSM_main.py            # Main script for Reduced Rank Extrapolation QSM
+├── models.py                  # Model definitions for MA-Mo-QSM and RRE-QSM
+├── utils.py                   # QSM utilities, losses, dipole kernel, visualization
 ├── modules/
-│   ├── metrics.py          # Validation metrics (PSNR, RMSE, HFEN, SSIM)
-│   └── model_from_DIP.py   # Alternative Deep Image Prior network baselines
-├── models.py               # Deep denoiser structures & core unrolled QSM physics networks
-├── utils.py                # Analytical 3D dipole kernel generators, Sobel losses, & plots
-├── main.py                 # Primary execution orchestration script (Loops & evaluations)
-└── .gitignore              # Out-of-commit exclusion policies for datasets and logs
+│   └── metrics.py             # Quantitative evaluation metrics
+│
+├── savedModels/               # Reconstruction outputs (generated automatically)
+│
+└── README.md
+```
+
+---
+
+## Requirements
+
+The implementation has been tested using
+
+- Python 3.12
+- PyTorch 2.4+
+- CUDA 12.x
+
+Install the required packages using
+
+```bash
+pip install torch numpy scipy pandas matplotlib
+```
+
+---
+
+## Dataset
+
+The implementation expects the following dataset structure:
+
+```
+QSM_data/
+└── data_for_experiments/
+    └── given_data/
+        └── raw_data_names_modified/
+            ├── patient_1/
+            ├── patient_2/
+            ├── ...
+            └── patient_12/
+```
+
+Each patient folder should contain
+
+```
+phs1.mat
+phs2.mat
+...
+
+msk1.mat
+...
+
+mag1.mat
+...
+
+cos1.mat
+...
+```
+
+where
+
+- **phs** : Local field map
+- **msk** : Brain mask
+- **mag** : Magnitude image
+- **cos** : COSMOS susceptibility map (ground truth)
+
+---
+
+# Running MA-Mo-QSM
+
+Run
+
+```bash
+python MA_MO_QSM_main.py
+```
+
+This script performs
+
+- Momentum-accelerated model-based reconstruction
+- Quantitative evaluation
+- Saves reconstructed susceptibility maps
+- Exports reconstruction metrics as CSV
+
+---
+
+# Running RRE-QSM
+
+Run
+
+```bash
+python RRE_QSM_main.py
+```
+
+This script performs
+
+- Reduced Rank Extrapolation accelerated reconstruction
+- Quantitative evaluation
+- Saves reconstructed susceptibility maps
+- Exports reconstruction metrics as CSV
+
+---
+
+## Reconstruction Frameworks
+
+### Momentum-Accelerated Model-Based QSM (MA-Mo-QSM)
+
+MA-Mo-QSM incorporates **Nesterov momentum acceleration** into iterative model-based QSM reconstruction.
+
+Each iteration consists of
+
+1. Momentum extrapolation
+2. Physics-based data consistency update
+3. Gradient descent reconstruction
+
+---
+
+### Reduced Rank Extrapolation QSM (RRE-QSM)
+
+RRE-QSM accelerates convergence by combining multiple previous iterates using **Reduced Rank Extrapolation (RRE)**.
+
+Each optimization cycle consists of
+
+1. Model-based gradient descent
+2. Construction of iterate differences
+3. QR-based coefficient estimation
+4. Extrapolated susceptibility update
+
+---
+
+## Output
+
+For each experiment the repository generates
+
+```
+savedModels/
+└── Experiment_Name/
+    ├── patient_1_orientation_1.mat
+    ├── patient_1_orientation_2.mat
+    ├── ...
+    ├── momentum_qsm_results.csv
+    └── qsm_results.csv
+```
+
+---
+
+## Evaluation Metrics
+
+The following metrics are computed automatically.
+
+- SSIM
+- PSNR
+- RMSE
+- HFEN
+
+---
+
+## Citation
+
+If you use this repository in your research, please cite
+
+```bibtex
+@article{Vaddadi2026AcceleratedQSM,
+  title={Accelerated Model-Based Quantitative Susceptibility Mapping Using Momentum and Vector Extrapolation},
+  author={Vaddadi, Venkatesh and Sirela, Venkata Ganesh and Yalavarthy, Phaneendra K.},
+  journal={Under Review},
+  year={2026}
+}
+```
+
+---
+
+## License
+
+This repository is released for academic research purposes.
+
+---
+
+## Contact
+
+**Vaddadi Venkatesh**
+
+Department of Computational and Data Sciences
+
+Indian Institute of Science (IISc)
+
+Bengaluru, India
+
+Email: *your_email_here*
