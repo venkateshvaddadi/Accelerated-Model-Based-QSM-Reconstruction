@@ -189,7 +189,7 @@ This repository is released for academic research purposes.
 
 ---
 
-## venkateshvaddadi254@gmail.com
+## Contact
 
 **Vaddadi Venkatesh**
 
@@ -198,5 +198,7 @@ Department of Computational and Data Sciences
 Indian Institute of Science (IISc)
 
 Bengaluru, India
+
+Email: *venkateshvaddadi254@gmail.com*
 
 Email: *your_email_here*
