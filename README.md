@@ -200,5 +200,3 @@ Indian Institute of Science (IISc)
 Bengaluru, India
 
 Email: *venkateshvaddadi254@gmail.com*
-
-Email: *your_email_here*
