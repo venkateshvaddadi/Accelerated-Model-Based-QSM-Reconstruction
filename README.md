@@ -19,6 +19,31 @@ The repository includes implementations of:
 
 Both methods solve the QSM inverse problem by enforcing data consistency through the dipole forward model while accelerating convergence using established optimization techniques.
 
+## Reconstruction Frameworks
+
+### Momentum-Accelerated Model-Based QSM (MA-Mo-QSM)
+
+MA-Mo-QSM incorporates **Nesterov momentum acceleration** into iterative model-based QSM reconstruction.
+
+Each iteration consists of
+
+1. Momentum extrapolation
+2. Physics-based data consistency update
+3. Gradient descent reconstruction
+
+---
+
+### Reduced Rank Extrapolation QSM (RRE-QSM)
+
+RRE-QSM accelerates convergence by combining multiple previous iterates using **Reduced Rank Extrapolation (RRE)**.
+
+Each optimization cycle consists of
+
+1. Model-based gradient descent
+2. Construction of iterate differences
+3. QR-based coefficient estimation
+4. Extrapolated susceptibility update
+
 ---
 
 ## Repository Structure
@@ -131,30 +156,6 @@ This script performs
 
 ---
 
-## Reconstruction Frameworks
-
-### Momentum-Accelerated Model-Based QSM (MA-Mo-QSM)
-
-MA-Mo-QSM incorporates **Nesterov momentum acceleration** into iterative model-based QSM reconstruction.
-
-Each iteration consists of
-
-1. Momentum extrapolation
-2. Physics-based data consistency update
-3. Gradient descent reconstruction
-
----
-
-### Reduced Rank Extrapolation QSM (RRE-QSM)
-
-RRE-QSM accelerates convergence by combining multiple previous iterates using **Reduced Rank Extrapolation (RRE)**.
-
-Each optimization cycle consists of
-
-1. Model-based gradient descent
-2. Construction of iterate differences
-3. QR-based coefficient estimation
-4. Extrapolated susceptibility update
 
 ---
 
