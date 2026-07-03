@@ -44,8 +44,25 @@ Each optimization cycle consists of
 3. QR-based coefficient estimation
 4. Extrapolated susceptibility update
 
+## Proposed Frameworks
+
+### Momentum-Accelerated Model-Based QSM (MA-Mo-QSM)
+
+<p align="center">
+<img src="figures/Figure_1.png" width="95%">
+</p>
+
+The proposed **MA-Mo-QSM** framework accelerates iterative model-based QSM reconstruction using **Nesterov momentum acceleration**. At each iteration, the current susceptibility estimate is first extrapolated using momentum and subsequently updated through a physics-based data-consistency step using the dipole forward model.
+
 ---
 
+### Reduced Rank Extrapolation-Based QSM (RRE-QSM)
+
+<p align="center">
+<img src="figures/Figure_2.png" width="95%">
+</p>
+
+The proposed **RRE-QSM** framework accelerates convergence by combining multiple previous susceptibility estimates through **Reduced Rank Extrapolation (RRE)**. A sequence of intermediate iterates is generated using the model-based QSM update, followed by QR-based computation of extrapolation coefficients to estimate an accelerated susceptibility map.
 ## Repository Structure
 
 ```
