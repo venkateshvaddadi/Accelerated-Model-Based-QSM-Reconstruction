@@ -1,8 +1,10 @@
-# Accelerated Model-Based Quantitative Susceptibility Mapping Using Momentum and Vector Extrapolation
+# Momentum-Accelerated Model-Based Quantitative Susceptibility Mapping
+for Efficient Dipole Inversion
 
 Official PyTorch implementation of the paper:
 
-> **Accelerated Model-Based Quantitative Susceptibility Mapping Using Momentum and Vector Extrapolation**
+> **Momentum-Accelerated Model-Based Quantitative Susceptibility Mapping
+for Efficient Dipole Inversion**
 
 ---
 
