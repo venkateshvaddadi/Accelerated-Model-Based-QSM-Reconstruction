@@ -113,22 +113,6 @@ This script performs
 
 ---
 
-# Running RRE-QSM
-
-Run
-
-```bash
-python RRE_QSM_main.py
-```
-
-This script performs
-
-- Reduced Rank Extrapolation accelerated reconstruction
-- Quantitative evaluation
-- Saves reconstructed susceptibility maps
-- Exports reconstruction metrics as CSV
-
----
 
 
 ---
