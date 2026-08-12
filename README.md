@@ -14,11 +14,6 @@ This repository provides two accelerated optimization algorithms for **Model-Bas
 
 Unlike conventional approaches that improve QSM reconstruction through sophisticated regularization models or deep learning priors, the proposed methods focus on **accelerating the optimization process itself** while preserving the underlying physics-based dipole inversion formulation.
 
-The repository includes implementations of:
-
-- **Momentum-Accelerated Model-Based QSM (MA-Mo-QSM)**
-
-Both methods solve the QSM inverse problem by enforcing data consistency through the dipole forward model while accelerating convergence using established optimization techniques.
 
 
 
