@@ -10,9 +10,9 @@ for Efficient Dipole Inversion**
 
 ## Overview
 
-This repository provides two accelerated optimization algorithms for **Model-Based Quantitative Susceptibility Mapping (QSM)** reconstruction.
+This repository contains the implementation of **MA-Mo-QSM (Momentum-Accelerated Model-Based Quantitative Susceptibility Mapping)**, a physics-based iterative framework that incorporates **Nesterov momentum** into model-based dipole inversion to accelerate the reconstruction process.
 
-Unlike conventional approaches that improve QSM reconstruction through sophisticated regularization models or deep learning priors, the proposed methods focus on **accelerating the optimization process itself** while preserving the underlying physics-based dipole inversion formulation.
+The proposed approach focuses on accelerating the optimization trajectory while retaining the underlying dipole forward model and data-fidelity formulation.
 
 
 
