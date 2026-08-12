@@ -10,7 +10,7 @@ The proposed approach focuses on accelerating the optimization trajectory while 
 
 
 
-## Proposed Frameworks
+## Proposed Framework
 
 ### Momentum-Accelerated Model-Based QSM (MA-Mo-QSM)
 
