@@ -132,8 +132,8 @@ class MomentumNetQSM_GradL2(nn.Module):
 # ==========================================
 base_dir = "savedModels/MOMENTUM_QSM_GRADL2_EXPERIMENTS"
 model_name = "MomentumQSM_GradL2"
-num_iters = 10
-rho = 1.0
+num_iters = 9
+rho = 0.95
 lambda_reg = 0.01
 
 timestamp = datetime.now().strftime("%b_%d_%H_%M_%S")
