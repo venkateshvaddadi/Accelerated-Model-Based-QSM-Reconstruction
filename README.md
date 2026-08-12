@@ -17,7 +17,6 @@ Unlike conventional approaches that improve QSM reconstruction through sophistic
 The repository includes implementations of:
 
 - **Momentum-Accelerated Model-Based QSM (MA-Mo-QSM)**
-- **Reduced Rank Extrapolation-Based QSM (RRE-QSM)**
 
 Both methods solve the QSM inverse problem by enforcing data consistency through the dipole forward model while accelerating convergence using established optimization techniques.
 
