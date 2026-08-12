@@ -27,7 +27,7 @@ Both methods solve the QSM inverse problem by enforcing data consistency through
 ### Momentum-Accelerated Model-Based QSM (MA-Mo-QSM)
 
 <p align="center">
-<img src="figures/Figure_1.png" width="95%">
+<img src="figures/MA_Mo_QSM.png" width="95%">
 </p>
 
 The proposed **MA-Mo-QSM** framework accelerates iterative model-based QSM reconstruction using **Nesterov momentum acceleration**. At each iteration, the current susceptibility estimate is first extrapolated using momentum and subsequently updated through a physics-based data-consistency step using the dipole forward model.
