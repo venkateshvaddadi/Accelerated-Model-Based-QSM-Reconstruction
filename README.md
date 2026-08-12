@@ -40,7 +40,6 @@ The proposed **MA-Mo-QSM** framework accelerates iterative model-based QSM recon
 Accelerated-QSM/
 │
 ├── MA_MO_QSM_main.py          # Main script for Momentum-Accelerated QSM
-├── RRE_QSM_main.py            # Main script for Reduced Rank Extrapolation QSM
 ├── models.py                  # Model definitions for MA-Mo-QSM and RRE-QSM
 ├── utils.py                   # QSM utilities, losses, dipole kernel, visualization
 ├── modules/
