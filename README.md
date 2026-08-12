@@ -1,12 +1,5 @@
 # Momentum-Accelerated Model-Based Quantitative Susceptibility Mapping
-for Efficient Dipole Inversion
 
-Official PyTorch implementation of the paper:
-
-> **Momentum-Accelerated Model-Based Quantitative Susceptibility Mapping
-for Efficient Dipole Inversion**
-
----
 
 ## Overview
 
